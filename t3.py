@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-"""t is for people that want do things, not organize their tasks."""
+'''t is for people that want do things, not organize their tasks.
+Editting by Colin Woodbury <colingw@gmail.com> for Python3 support.'''
 
 from __future__ import with_statement
 
@@ -32,7 +33,7 @@ def _hash(text):
     Currently SHA1 hashing is used.  It should be plenty for our purposes.
 
     """
-    return hashlib.sha1(text).hexdigest()
+    return hashlib.sha1(text.encode()).hexdigest()
 
 def _task_from_taskline(taskline):
     """Parse a taskline (from a task file) and return a task.
@@ -134,7 +135,7 @@ class TaskDict(object):
             if os.path.exists(path):
                 with open(path, 'r') as tfile:
                     tls = [tl.strip() for tl in tfile if tl]
-                    tasks = map(_task_from_taskline, tls)
+                    tasks = _map(_task_from_taskline, tls)
                     for task in tasks:
                         getattr(self, kind)[task['id']] = task
 
@@ -147,13 +148,14 @@ class TaskDict(object):
         If no tasks match the prefix an UnknownPrefix exception will be raised.
 
         """
-        matched = filter(lambda tid: tid.startswith(prefix), self.tasks.keys())
+        matched = _filter(lambda tid: tid.startswith(prefix), 
+                          self.tasks.keys())
         if len(matched) == 1:
             return self.tasks[matched[0]]
         elif len(matched) == 0:
             raise UnknownPrefix(prefix)
         else:
-            matched = filter(lambda tid: tid == prefix, self.tasks.keys())
+            matched = _filter(lambda tid: tid == prefix, self.tasks.keys())
             if len(matched) == 1:
                 return self.tasks[matched[0]]
             else:
@@ -201,11 +203,11 @@ class TaskDict(object):
             for task_id, prefix in _prefixes(tasks).items():
                 tasks[task_id]['prefix'] = prefix
 
-        plen = max(map(lambda t: len(t[label]), tasks.values())) if tasks else 0
+        plen = max(_map(lambda t: len(t[label]), tasks.values())) if tasks else 0
         for _, task in sorted(tasks.items()):
             if grep.lower() in task['text'].lower():
                 p = '%s - ' % task[label].ljust(plen) if not quiet else ''
-                print p + task['text']
+                print(p + task['text'])
 
     def write(self, delete_if_empty=False):
         """Flush the finished and unfinished tasks to the files on disk."""
@@ -259,6 +261,20 @@ def _build_parser():
 
     return parser
 
+def _filter(func, items):
+    '''Since filter() is an iterator in python3, a few function calls
+    in this script needed to be changed.
+    05/27/2011
+    '''
+    return [x for x in filter(func, items)]
+
+def _map(func, items):
+    '''Since map() is an interator in python3, a few function calls
+    in this script needed to be changed.
+    05/27/2011
+    '''
+    return [x for x in map(func, items)]
+
 def _main():
     """Run the command-line interface."""
     (options, args) = _build_parser().parse_args()
@@ -279,9 +295,9 @@ def _main():
         else:
             td.print_list(verbose=options.verbose, quiet=options.quiet,
                           grep=options.grep)
-    except AmbiguousPrefix, e:
+    except AmbiguousPrefix as e:
         sys.stderr.write('The ID "%s" matches more than one task.' % e.prefix)
-    except UnknownPrefix, e:
+    except UnknownPrefix as e:
         sys.stderr.write('The ID "%s" does not match any task.' % e.prefix)
 
 

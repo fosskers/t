@@ -1,8 +1,8 @@
-t
+t - t3
 =======
 
 `t` is a command-line todo list manager for people that want to *finish* tasks,
-not organize them.
+not organize them. t3 is its python3 equivalent.
 
 
 Why t?
@@ -64,16 +64,16 @@ the list has a couple of tasks in it, adding more is far less likely to cause
 a merge conflict because the list is sorted.
 
 
-Installing t
+Installing t3
 ------------
 
-`t` requires [Python][] 2.5 or newer, and some form of UNIX-like shell (bash
+`t3` requires [Python][] 3.0 or newer, and some form of UNIX-like shell (bash
 works well).  It works on Linux, OS X, and Windows (with [Cygwin][]).
 
 [Python]: http://python.org/
 [Cygwin]: http://www.cygwin.com/
 
-Installing and setting up `t` will take about one minute.
+Installing and setting up `t3` will take about one minute.
 
 First, [download][] the newest version or clone the Mercurial repository
 (`hg clone http://bitbucket.org/sjl/t/`).  Put it anywhere you like.
@@ -85,31 +85,31 @@ Create that directory:
 
     mkdir ~/tasks
 
-Finally, set up an alias to run `t`.  Put something like this in your
+Finally, set up an alias to run `t3`.  Put something like this in your
 `~/.bashrc` file:
 
-    alias t='python ~/path/to/t.py --task-dir ~/tasks --list tasks'
+    alias t='python3 ~/path/to/t3.py --task-dir ~/tasks --list tasks'
 
 Make sure you run `source ~/.bashrc` or restart your terminal window to make
 the alias take effect.
 
-Using t
+Using t3
 -------
 
-`t` is quick and easy to use.
+`t3` is quick and easy to use.
 
 ### Add a Task
 
-To add a task, use `t [task description]`:
+To add a task, use `t3 [task description]`:
 
-    $ t Clean the apartment.
-    $ t Write chapter 10 of the novel.
-    $ t Buy more beer.
+    $ t3 Clean the apartment.
+    $ t3 Write chapter 10 of the novel.
+    $ t3 Buy more beer.
     $
 
 ### List Your Tasks
 
-Listing your tasks is even easier -- just use `t`:
+Listing your tasks is even easier -- just use `t3`:
 
     $ t
     9  - Buy more beer.
@@ -117,14 +117,14 @@ Listing your tasks is even easier -- just use `t`:
     31 - Write chapter 10 of the novel.
     $
 
-`t` will list all of your unfinished tasks and their IDs.
+`t3` will list all of your unfinished tasks and their IDs.
 
 ### Finish a Task
 
-After you're done with something, use `t -f ID` to finish it:
+After you're done with something, use `t3 -f ID` to finish it:
 
-    $ t -f 31
-    $ t
+    $ t3 -f 31
+    $ t3
     9  - Buy more beer.
     30 - Clean the apartment.
     $
@@ -132,18 +132,18 @@ After you're done with something, use `t -f ID` to finish it:
 ### Edit a Task
 
 Sometimes you might want to change the wording of a task.  You can use
-`t -e ID [new description]` to do that:
+`t3 -e ID [new description]` to do that:
 
-    $ t -e 30 Clean the entire apartment.
-    $ t
+    $ t3 -e 30 Clean the entire apartment.
+    $ t3
     9  - Buy more beer.
     30 - Clean the entire apartment.
     $
 
 Yes, nerds, you can use sed-style substitution strings:
 
-    $ t -e 9 /more/a lot more/
-    $ t
+    $ t3 -e 9 /more/a lot more/
+    $ t3
     9  - Buy a lot more beer.
     30 - Clean the entire apartment.
     $
@@ -154,7 +154,7 @@ If you keep your task list in a visible place (like your desktop) you might
 want it to be deleted if there are no tasks in it.  To do this automatically
 you can use the `--delete-if-empty` option in your alias:
 
-    alias t='python ~/path/to/t.py --task-dir ~/Desktop --list todo.txt --delete-if-empty'
+    alias t='python3 ~/path/to/t3.py --task-dir ~/Desktop --list todo.txt --delete-if-empty'
 
 Tips and Tricks
 ---------------
@@ -165,8 +165,8 @@ Tips and Tricks
 
 Counting your tasks is simple using the `wc` program:
 
-    $ t | wc -l
-          2
+    $ t3 | wc -l
+           2
     $
 
 ### Put Your Task Count in Your Bash Prompt
@@ -177,8 +177,8 @@ Want a count of your tasks right in your prompt?  Edit your `~/.bashrc` file:
 
 Now you've got a prompt that looks something like this:
 
-    [2] $ t -f 30
-    [1] $ t Feed the cat.
+    [2] $ t3 -f 30
+    [1] $ t3 Feed the cat.
     [2] $
 
 ### Multiple Lists
@@ -187,9 +187,9 @@ Now you've got a prompt that looks something like this:
 sometimes it's useful to be able to have at least *one* level of organization.
 To split up your tasks into different lists you can add a few more aliases:
 
-    alias g='python ~/path/to/t.py --task-dir ~/tasks --list groceries'
-    alias m='python ~/path/to/t.py --task-dir ~/tasks --list music-to-buy'
-    alias w='python ~/path/to/t.py --task-dir ~/tasks --list wines-to-try'
+    alias g='python3 ~/path/to/t3.py --task-dir ~/tasks --list groceries'
+    alias m='python3 ~/path/to/t3.py --task-dir ~/tasks --list music-to-buy'
+    alias w='python3 ~/path/to/t3.py --task-dir ~/tasks --list wines-to-try'
 
 ### Distributed Bugtracking
 
@@ -198,7 +198,7 @@ want to use such a heavyweight system?  You can use `t` instead.
 
 Add another alias to your `~/.bashrc` file:
 
-    alias b='python ~/path/to/t.py --task-dir . --list bugs'
+    alias b='python3 ~/path/to/t3.py --task-dir . --list bugs'
 
 Now when you're in your project directory you can use `b` to manage the list of
 bugs/tasks for that project.  Add the `bugs` file to version control and you're
@@ -212,6 +212,9 @@ Problems, Contributions, Etc
 
 `t` was hacked together in a couple of nights to fit my needs.  If you use it
 and find a bug, please let me know.
+
+`t3` is the Python3 version, editted quickly by Colin Woodbury for the newest
+versions of Python.
 
 If you want to request a feature feel free, but remember that `t` is meant to
 be simple.  If you need anything beyond the basics you might want to look at
